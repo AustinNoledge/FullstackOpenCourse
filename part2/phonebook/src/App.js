@@ -1,23 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import axios from 'axios'
 
 const App = () => {
   // 定义全局状态
-  const [ persons, setPersons ] = useState([
-    {
-      name: 'Arto Hellas',
-      number: '1234'
-    },
-    {
-      name: "Austin Wang",
-      number: "0120"
-    }
-  ])
+  const [ persons, setPersons ] = useState([])
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
-  const [search, setSearch] = useState('')
+  const [ search, setSearch ] = useState('')
+
+  // 使用effect hook获取初始数据
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   // 定义表单提交handle函数
   const handleChangeName = (event) => setNewName(event.target.value)
