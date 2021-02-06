@@ -8,9 +8,9 @@ const Persons = ({persons, search, removeFunction}) => {
     return(
         <div>
             {actualPersons.map(each => (
-                <p key={each.name}>
+                <li key={each.name} className="note">
                     {each.name} {each.number} <button onClick={() => removeFunction(each.id)}>delete</button>
-                </p>
+                </li>
             ))}
         </div>
     )

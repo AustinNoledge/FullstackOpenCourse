@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   // 定义全局状态
@@ -10,6 +11,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ search, setSearch ] = useState('')
+  const [ message, setMessage ] = useState('')
+  const [ allWell, setAllWell ] = useState(true)
   
   // 定义表单提交handle函数
   const handleChangeName = (event) => setNewName(event.target.value)
@@ -22,7 +25,11 @@ const App = () => {
       .getAll()
       .then(response => {
         setPersons(response)
-        console.log("finished fetching persons info");
+        // 推送屏幕通知
+        setMessage("finished fetching data")
+        setTimeout(() => {
+          setMessage("")
+        }, 1000)
       })
       .catch(error => {
         console.log("something wrong when fetching data from the server");
@@ -44,7 +51,10 @@ const App = () => {
               setPersons(persons.map(each => (each.name === newName) ? response : each))
               setNewName("")
               setNewNumber("")
-              console.log("finished overwrite the person");
+              setMessage("finished overwriting this person")
+              setTimeout(() => {
+                setMessage("")
+              }, 1000)
             })
         }
     } else if (persons.some(each => (each.number === newNumber))) {
@@ -57,7 +67,10 @@ const App = () => {
             setPersons(persons.concat(response))
             setNewName("")
             setNewNumber("")
-            console.log("finished adding new person to the server");
+            setMessage("finished adding it to the server")
+            setTimeout(() => {
+              setMessage("")
+            }, 1000)
           })
     }
   }
@@ -69,14 +82,26 @@ const App = () => {
         .remove(id)
         .then(response => {
           setPersons(persons.filter(each => (each.id !== id)))
-          console.log("finished removing the person");
+          setMessage("finished removing it")
+          setTimeout(() => {
+            setMessage("")
+          }, 1000)
+        })
+        .catch(error => {
+          setAllWell(false)
+          setMessage("information of this person has been deleted")
+          setTimeout(() => {
+            setAllWell(true)
+            setMessage("")
+          }, 2000)
         })
     }
   }
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <Notification message={message} allWell={allWell} />
       <Filter search={search} handleChangeSearch={handleChangeSearch} />
       <h3>Add a new</h3>
       <PersonForm
@@ -87,7 +112,9 @@ const App = () => {
         handleChangeNumber = {handleChangeNumber}
       />
       <h3>Numbers</h3>
-      <Persons persons={persons} search={search} removeFunction={removePerson} />
+      <ul>
+        <Persons persons={persons} search={search} removeFunction={removePerson} />
+      </ul>
       {/* {actualPersons.map(each => (<p key={each.name}>{each.name} {each.number}</p>))} */}
     </div>
   )
