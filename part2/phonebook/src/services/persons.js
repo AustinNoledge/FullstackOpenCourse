@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const baseUrl = "http://localhost:3001/persons"
+// 相对url
+const baseUrl = "api/persons"
 
 const getAll = () => {
     const request = axios.get(baseUrl)
@@ -22,4 +23,5 @@ const remove = (id) => {
     return request.then(response => response.data)
 }
 
+// 获取，创建，更新，删除
 export default {getAll, create, update, remove}

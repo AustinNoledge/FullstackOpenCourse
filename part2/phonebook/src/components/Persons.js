@@ -9,7 +9,7 @@ const Persons = ({persons, search, removeFunction}) => {
         <div>
             {actualPersons.map(each => (
                 <li key={each.name} className="note">
-                    {each.name} {each.number} <button onClick={() => removeFunction(each.id)}>delete</button>
+                    {each.Name} {each.Number} <button onClick={() => removeFunction(each.id)}>delete</button>
                 </li>
             ))}
         </div>
