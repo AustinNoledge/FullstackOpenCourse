@@ -3,7 +3,7 @@ import React from 'react'
 const Persons = ({persons, search, removeFunction}) => {
     const actualPersons = (search === '')
         ? persons
-        : persons.filter(each => (each.name.toLowerCase().includes(search.toLowerCase())))
+        : persons.filter(each => (each.Name.toLowerCase().includes(search.toLowerCase())))
 
     return(
         <div>

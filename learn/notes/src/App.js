@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+// 组件
 import Note from "./components/Note";
+// 服务
 import noteCom from "./services/notes"
 
 const App = () => {
@@ -7,17 +9,14 @@ const App = () => {
   const [newNote, setNewNote] = useState("");
   const [showAll, setShowAll] = useState(true);
 
-  // 首次从服务器获取初始数据
-  // 每次重新渲染都会重新加载数据
+  // 首次运行，获取初始notes数据（[]代表每次执行一次）
   useEffect(() => {
-    // 先是获取数据，方法return响应数据data，将其设为notes
     noteCom
       .getAll()
       .then(response => {
         setNotes(response)
       })
   }, [])
-  // []代表仅仅执行一次
 
   // 修改note important
   const toggleImporttantOfId = (id) => {

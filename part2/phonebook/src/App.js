@@ -40,39 +40,59 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     // 防止重复添加
-    if (persons.some(each => (each.name === newName))) {
-        // alert(`${newName} is already added to the phonebook`)
-        if (window.confirm(`Do you want to overwrite ${newName} number?`)) {
-          const target = persons.find(each => each.name === newName)
-          const changePerson = {...target, number: newNumber}
-          personService
-            .update(target.id, changePerson)
-            .then(response => {
-              setPersons(persons.map(each => (each.name === newName) ? response : each))
-              setNewName("")
-              setNewNumber("")
-              setMessage("finished overwriting this person")
-              setTimeout(() => {
-                setMessage("")
-              }, 1000)
-            })
-        }
-    } else if (persons.some(each => (each.number === newNumber))) {
-        alert(`${newNumber} is already added to the phonebook`)
-    } else {
-        const newPerson = {name: newName, number: newNumber, id:persons.length+1}
-        personService
-          .create(newPerson)
-          .then(response => {
-            setPersons(persons.concat(response))
-            setNewName("")
-            setNewNumber("")
-            setMessage("finished adding it to the server")
-            setTimeout(() => {
-              setMessage("")
-            }, 1000)
-          })
-    }
+    // if (persons.some(each => (each.name === newName))) {
+    //     // alert(`${newName} is already added to the phonebook`)
+    //     if (window.confirm(`Do you want to overwrite ${newName} number?`)) {
+    //       const target = persons.find(each => each.name === newName)
+    //       const changePerson = {...target, number: newNumber}
+    //       personService
+    //         .update(target.id, changePerson)
+    //         .then(response => {
+    //           setPersons(persons.map(each => (each.name === newName) ? response : each))
+    //           setNewName("")
+    //           setNewNumber("")
+    //           setMessage("finished overwriting this person")
+    //           setTimeout(() => {
+    //             setMessage("")
+    //           }, 1000)
+    //         })
+    //     }
+    // } else if (persons.some(each => (each.number === newNumber))) {
+    //     alert(`${newNumber} is already added to the phonebook`)
+    // } else {
+    //     const newPerson = {name: newName, number: newNumber, id:persons.length+1}
+    //     personService
+    //       .create(newPerson)
+    //       .then(response => {
+    //         setPersons(persons.concat(response))
+    //         setNewName("")
+    //         setNewNumber("")
+    //         setMessage("finished adding it to the server")
+    //         setTimeout(() => {
+    //           setMessage("")
+    //         }, 1000)
+    //       })
+    // }
+    const newPerson = {name: newName, number: newNumber}
+    personService
+      .create(newPerson)
+      .then(response => {
+        setPersons(persons.concat(response))
+        setNewName("")
+        setNewNumber("")
+        setMessage("finished adding it to the server")
+        setTimeout(() => {
+          setMessage("")
+        }, 1000)
+      })
+      .catch(error => {
+        setAllWell(false)
+        setMessage(error.response.data.err)
+        setTimeout(() => {
+          setMessage("")
+          setAllWell(true)
+        }, 5000)
+      })
   }
 
   // 定义删除函数

@@ -2,6 +2,7 @@ import axios from 'axios'
 
 // 相对url
 const baseUrl = "api/persons"
+// const baseUrl = "http://localhost:3001/api/persons"
 
 const getAll = () => {
     const request = axios.get(baseUrl)
